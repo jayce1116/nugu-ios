@@ -825,7 +825,6 @@
 		064FD86A25A2CEB800DE6454 /* UtilityAgentProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityAgentProtocol.swift; sourceTree = "<group>"; };
 		064FD88025A2CEE000DE6454 /* UtilityAgent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityAgent.swift; sourceTree = "<group>"; };
 		064FD88C25A2DC8B00DE6454 /* UtilityBlockItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityBlockItem.swift; sourceTree = "<group>"; };
-		06500CCC2578821B0088F776 /* NuguUtils.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = NuguUtils.podspec; sourceTree = "<group>"; };
 		065DF8BC25637D51009CF99E /* Attachable+Convenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Attachable+Convenience.swift"; sourceTree = "<group>"; };
 		065DF8C725637D57009CF99E /* Attachable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Attachable.swift; sourceTree = "<group>"; };
 		067CB450256E4DAA00D57AF0 /* VoiceChromePresenterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceChromePresenterDelegate.swift; sourceTree = "<group>"; };
@@ -841,21 +840,12 @@
 		06FE563E253E9EC0002FAC9B /* TTSPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TTSPlayer.swift; sourceTree = "<group>"; };
 		06FE5684253EDB64002FAC9B /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
 		06FE568F253FCC1E002FAC9B /* AudioPlayerAgentError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerAgentError.swift; sourceTree = "<group>"; };
-		1F1008BB237688E200D90FEE /* NuguLoginKit.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = NuguLoginKit.podspec; sourceTree = "<group>"; };
-		1F1008BD237688E200D90FEE /* NuguClientKit.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = NuguClientKit.podspec; sourceTree = "<group>"; };
-		1F1008BE237688E200D90FEE /* NuguCore.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = NuguCore.podspec; sourceTree = "<group>"; };
-		1F1008BF237688E300D90FEE /* KeenSense.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = KeenSense.podspec; sourceTree = "<group>"; };
-		1F1008C1237688E300D90FEE /* JadeMarble.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = JadeMarble.podspec; sourceTree = "<group>"; };
-		1F1008C2237688E300D90FEE /* NuguUIKit.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = NuguUIKit.podspec; sourceTree = "<group>"; };
 		1F1008C92376925C00D90FEE /* feature-request.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "feature-request.md"; sourceTree = "<group>"; };
 		1F1008CA2376925C00D90FEE /* bug-report.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "bug-report.md"; sourceTree = "<group>"; };
 		1F1008CD23791F5400D90FEE /* SampleApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SampleApp.entitlements; sourceTree = "<group>"; };
-		1F10094E237A886100D90FEE /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
-		1F100953237A8AE800D90FEE /* Cartfile.resolved */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile.resolved; sourceTree = "<group>"; };
 		1F100965237C0D0100D90FEE /* scheduled-feature.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "scheduled-feature.md"; sourceTree = "<group>"; };
 		1F100990238529C100D90FEE /* TimeIntervallic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeIntervallic.swift; sourceTree = "<group>"; };
 		1F100995238795FF00D90FEE /* NuguTimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NuguTimeInterval.swift; sourceTree = "<group>"; };
-		1F2E8011238FD43C00569C59 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 		1F2E803D2397A27300569C59 /* KeywordDetectorState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordDetectorState.swift; sourceTree = "<group>"; };
 		1F2E803F2397A2E500569C59 /* KeywordDetectorDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeywordDetectorDelegate.swift; sourceTree = "<group>"; };
 		1F3B2F1C2660C01300D6432B /* RoutineAgentDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineAgentDelegate.swift; sourceTree = "<group>"; };
@@ -873,7 +863,6 @@
 		1F93379625BF182400CEBF66 /* MessageToSendItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageToSendItem.swift; sourceTree = "<group>"; };
 		1F9337AC25BF265200CEBF66 /* MessageAgent+Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageAgent+Event.swift"; sourceTree = "<group>"; };
 		1F9C5B5D23C30B4B0086CC04 /* NuguOAuthTokenApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NuguOAuthTokenApi.swift; sourceTree = "<group>"; };
-		1F9C5B6723E3FAC60086CC04 /* NuguAgents.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = NuguAgents.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		1F9EF1F3248A1F8E000786E5 /* ApiProvidable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiProvidable.swift; sourceTree = "<group>"; };
 		1F9EF1F5248A327F000786E5 /* NuguOAuthUtilApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NuguOAuthUtilApi.swift; sourceTree = "<group>"; };
 		1F9EF1F7248A4BD1000786E5 /* NuguUserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NuguUserInfo.swift; sourceTree = "<group>"; };
@@ -1025,7 +1014,6 @@
 		3D9C42C522745A07000A6585 /* nugu-ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "nugu-ios.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D9C42D222745B48000A6585 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
 		3D9C42D522745B48000A6585 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
-		3D9C42D622745C9D000A6585 /* Fastfile */ = {isa = PBXFileReference; lastKnownFileType = text; name = Fastfile; path = fastlane/Fastfile; sourceTree = SOURCE_ROOT; };
 		3D9C42D922745DAF000A6585 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text; path = .swiftlint.yml; sourceTree = SOURCE_ROOT; };
 		3D9C42DB22745DB0000A6585 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = SOURCE_ROOT; };
 		3D9C43012274611B000A6585 /* nugu-ios-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "nugu-ios-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1194,7 +1182,6 @@
 		73C256B1269740D80008FE7F /* Lottie.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Lottie.xcframework; path = Carthage/Build/Lottie.xcframework; sourceTree = "<group>"; };
 		73C256D126974ED50008FE7F /* Nimble.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Nimble.xcframework; path = Carthage/Build/Nimble.xcframework; sourceTree = "<group>"; };
 		73C256D226974ED50008FE7F /* Quick.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Quick.xcframework; path = Carthage/Build/Quick.xcframework; sourceTree = "<group>"; };
-		73C256D5269822520008FE7F /* SilverTray.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = SilverTray.podspec; sourceTree = "<group>"; };
 		73D380A323E7F22E000C5ED5 /* SpeexCodec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeexCodec.swift; sourceTree = "<group>"; };
 		73E7E4C1294670E500361634 /* AudioPlayerResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayerResult.swift; sourceTree = "<group>"; };
 		73E8F35226C3C31500B99140 /* SpeechRecognizerAggregatorState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeechRecognizerAggregatorState.swift; sourceTree = "<group>"; };
@@ -1220,7 +1207,6 @@
 		7525AC84249AFE8E006800A3 /* NuguServiceKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NuguServiceKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7525AC86249AFE8E006800A3 /* NuguServiceKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NuguServiceKit.h; sourceTree = "<group>"; };
 		7525AC87249AFE8E006800A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7525AC90249AFFFB006800A3 /* NuguServiceKit.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = NuguServiceKit.podspec; sourceTree = "<group>"; };
 		7525AC93249B01BC006800A3 /* HttpCookie+Convenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HttpCookie+Convenience.swift"; sourceTree = "<group>"; };
 		7525AC94249B01BC006800A3 /* WebOpenExternalApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebOpenExternalApp.swift; sourceTree = "<group>"; };
 		7525AC98249B01C8006800A3 /* NuguServiceWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NuguServiceWebView.swift; sourceTree = "<group>"; };
@@ -1258,9 +1244,6 @@
 		75E623D525E89EC800EAAE3C /* ASRBeepPlayerResourcesURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASRBeepPlayerResourcesURL.swift; sourceTree = "<group>"; };
 		75E624D52603257200EAAE3C /* MarqueeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarqueeLabel.swift; sourceTree = "<group>"; };
 		75F1A7D724B451F00023B6C9 /* WeakScriptMessageHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeakScriptMessageHandler.swift; sourceTree = "<group>"; };
-		75FC863526AA463C00699784 /* NuguObjcUtils.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = NuguObjcUtils.podspec; sourceTree = "<group>"; };
-		75FC863626AA463C00699784 /* TycheSDK.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = TycheSDK.podspec; sourceTree = "<group>"; };
-		75FC863726AA463C00699784 /* OpusSDK.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = OpusSDK.podspec; sourceTree = "<group>"; };
 		7E0713DA24FCD01C009314DA /* NuguUserDefault.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NuguUserDefault.swift; sourceTree = "<group>"; };
 		7E0713DD24FCD02C009314DA /* UserDefaults+Nugu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Nugu.swift"; sourceTree = "<group>"; };
 		7E0E0B072437077F00198FCB /* EndPointDetectable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndPointDetectable.swift; sourceTree = "<group>"; };
@@ -1603,15 +1586,6 @@
 			path = Common;
 			sourceTree = "<group>";
 		};
-		1F1008B82376873C00D90FEE /* Dependency */ = {
-			isa = PBXGroup;
-			children = (
-				1F100951237A887A00D90FEE /* Cocoapods */,
-				1F100950237A886600D90FEE /* Carthage */,
-			);
-			name = Dependency;
-			sourceTree = "<group>";
-		};
 		1F1008C42376925C00D90FEE /* .github */ = {
 			isa = PBXGroup;
 			children = (
@@ -1630,35 +1604,6 @@
 				1F100965237C0D0100D90FEE /* scheduled-feature.md */,
 			);
 			path = ISSUE_TEMPLATE;
-			sourceTree = "<group>";
-		};
-		1F100950237A886600D90FEE /* Carthage */ = {
-			isa = PBXGroup;
-			children = (
-				1F10094E237A886100D90FEE /* Cartfile */,
-				1F100953237A8AE800D90FEE /* Cartfile.resolved */,
-			);
-			name = Carthage;
-			sourceTree = "<group>";
-		};
-		1F100951237A887A00D90FEE /* Cocoapods */ = {
-			isa = PBXGroup;
-			children = (
-				75FC863526AA463C00699784 /* NuguObjcUtils.podspec */,
-				75FC863726AA463C00699784 /* OpusSDK.podspec */,
-				75FC863626AA463C00699784 /* TycheSDK.podspec */,
-				06500CCC2578821B0088F776 /* NuguUtils.podspec */,
-				1F9C5B6723E3FAC60086CC04 /* NuguAgents.podspec */,
-				1F1008BE237688E200D90FEE /* NuguCore.podspec */,
-				1F1008BD237688E200D90FEE /* NuguClientKit.podspec */,
-				1F1008BB237688E200D90FEE /* NuguLoginKit.podspec */,
-				1F1008C2237688E300D90FEE /* NuguUIKit.podspec */,
-				7525AC90249AFFFB006800A3 /* NuguServiceKit.podspec */,
-				1F1008C1237688E300D90FEE /* JadeMarble.podspec */,
-				1F1008BF237688E300D90FEE /* KeenSense.podspec */,
-				73C256D5269822520008FE7F /* SilverTray.podspec */,
-			);
-			name = Cocoapods;
 			sourceTree = "<group>";
 		};
 		1F1009982387969600D90FEE /* TimeInterval */ = {
@@ -2480,7 +2425,6 @@
 			isa = PBXGroup;
 			children = (
 				1F1008C42376925C00D90FEE /* .github */,
-				1F1008B82376873C00D90FEE /* Dependency */,
 				3D9C429B227458E8000A6585 /* Configs */,
 				73152F9B23E0405900F843C3 /* NuguAgents */,
 				1FFFEFFE23753F1800C9A177 /* NuguCore */,
@@ -2531,10 +2475,8 @@
 		3D9C429B227458E8000A6585 /* Configs */ = {
 			isa = PBXGroup;
 			children = (
-				3D9C42D622745C9D000A6585 /* Fastfile */,
 				3D9C42D222745B48000A6585 /* LICENSE */,
 				3D9C42D522745B48000A6585 /* README.md */,
-				1F2E8011238FD43C00569C59 /* CHANGELOG.md */,
 				3D9C42DB22745DB0000A6585 /* .gitignore */,
 				3D9C42D922745DAF000A6585 /* .swiftlint.yml */,
 			);
