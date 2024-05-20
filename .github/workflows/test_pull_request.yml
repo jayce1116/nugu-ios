@@ -7,18 +7,5 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Cache Carthage
-        id: cache-carthage
-        uses: actions/cache@v3
-        with:
-          path: Carthage
-          key: ${{ runner.os }}-carthage-${{ hashFiles('**/Cartfile.resolved') }}
-          restore-keys: |
-            ${{ runner.os }}-carthage-
-
-      - name: Update Carthage
-        if: steps.cache-carthage.outputs.cache-hit != 'true'
-        run: carthage bootstrap --use-xcframeworks --platform iOS --cache-builds
-        
       - name: Run tests
         run: xcodebuild -project nugu-ios.xcodeproj -scheme SampleApp CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
