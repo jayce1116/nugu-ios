@@ -19,6 +19,7 @@
 //
 
 import Foundation
+import Combine
 
 import NuguCore
 
@@ -51,5 +52,20 @@ public extension UpstreamDataSendable {
                 onError: { completion?(.error($0)) }
             )
             .asCompletable()
+    }
+    
+    func sendEvent(
+        _ event: Eventable,
+        eventIdentifier: EventIdentifier,
+        context: [ContextInfo],
+        property: CapabilityAgentProperty,
+        completion: ((StreamDataState) -> Void)? = nil
+    ) {
+        let message = event.makeEventMessage(
+            property: property,
+            eventIdentifier: eventIdentifier,
+            contextPayload: context
+        )
+        sendEvent(message, completion: completion)
     }
 }

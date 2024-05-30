@@ -529,6 +529,7 @@
 		E69D1E022BFAB7D80061C704 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = E69D1E012BFAB7D80061C704 /* Lottie */; };
 		E6BE047C2A0BA1A400AE29E3 /* Image+Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BE047B2A0BA1A400AE29E3 /* Image+Event.swift */; };
 		E6BE047E2A0BA1BD00AE29E3 /* ImageAgent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BE047D2A0BA1BD00AE29E3 /* ImageAgent.swift */; };
+		E6BFB95C2C0698CB007AA282 /* Publishers+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BFB95B2C0698CB007AA282 /* Publishers+Convenience.swift */; };
 		E6D10A982B9FD2FE0004DE40 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = E6D10A972B9FD2FE0004DE40 /* PrivacyInfo.xcprivacy */; };
 		E6D10A9A2B9FD9C20004DE40 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = E6D10A992B9FD9C20004DE40 /* PrivacyInfo.xcprivacy */; };
 		E6D10A9C2B9FD9E80004DE40 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = E6D10A9B2B9FD9E80004DE40 /* PrivacyInfo.xcprivacy */; };
@@ -1312,6 +1313,7 @@
 		E649868928337649001AD733 /* ControlCenterManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControlCenterManager.swift; sourceTree = "<group>"; };
 		E6BE047B2A0BA1A400AE29E3 /* Image+Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Image+Event.swift"; sourceTree = "<group>"; };
 		E6BE047D2A0BA1BD00AE29E3 /* ImageAgent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAgent.swift; sourceTree = "<group>"; };
+		E6BFB95B2C0698CB007AA282 /* Publishers+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publishers+Convenience.swift"; sourceTree = "<group>"; };
 		E6D10A972B9FD2FE0004DE40 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		E6D10A992B9FD9C20004DE40 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		E6D10A9B2B9FD9E80004DE40 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
@@ -1931,6 +1933,7 @@
 				7E26C58023A08DC100716E44 /* URLRequest+Rx.swift */,
 				75082BC5243AC85E0027D76D /* FileManager+Convenience.swift */,
 				73752B3025B87F38005C27DA /* TypedNotification+post.swift */,
+				E6BFB95B2C0698CB007AA282 /* Publishers+Convenience.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -4046,6 +4049,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E6BFB95C2C0698CB007AA282 /* Publishers+Convenience.swift in Sources */,
 				1FFFF3922375707100C9A177 /* ContextManager.swift in Sources */,
 				7373892324A46D120018DDD2 /* MediaPlayable.swift in Sources */,
 				7373894924A46E720018DDD2 /* DirectiveSequenceable.swift in Sources */,
