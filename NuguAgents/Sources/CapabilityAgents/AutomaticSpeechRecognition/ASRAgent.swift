@@ -59,6 +59,7 @@ public final class ASRAgent: ASRAgentProtocol {
     // Observers
     private let notificationCenter = NotificationCenter.default
     private var playSyncObserver: Any?
+    private var directiveReceiveObserver: Any?
     
     public var options: ASROptions = ASROptions(endPointing: .client)
     private(set) public var asrState: ASRState = .idle {
@@ -104,7 +105,6 @@ public final class ASRAgent: ASRAgentProtocol {
             case .partial:
                 break
             case .complete:
-                asrState = .idle
                 expectSpeech = nil
             case .cancel:
                 asrState = .idle
@@ -214,7 +214,8 @@ public final class ASRAgent: ASRAgentProtocol {
         dialogAttributeStore: DialogAttributeStoreable,
         sessionManager: SessionManageable,
         playSyncManager: PlaySyncManageable,
-        interactionControlManager: InteractionControlManageable
+        interactionControlManager: InteractionControlManageable,
+        streamDataRouter: StreamDataRoutable
     ) {
         self.focusManager = focusManager
         self.upstreamDataSender = upstreamDataSender
@@ -226,6 +227,7 @@ public final class ASRAgent: ASRAgentProtocol {
         self.interactionControlManager = interactionControlManager
         
         addPlaySyncObserver(playSyncManager)
+        addStreamDataObserver(streamDataRouter)
         contextManager.addProvider(contextInfoProvider)
         focusManager.add(channelDelegate: self)
         directiveSequencer.add(directiveHandleInfos: handleableDirectiveInfos.asDictionary)
@@ -234,6 +236,10 @@ public final class ASRAgent: ASRAgentProtocol {
     deinit {
         if let playSyncObserver = playSyncObserver {
             notificationCenter.removeObserver(playSyncObserver)
+        }
+        
+        if let directiveReceiveObserver = directiveReceiveObserver {
+            notificationCenter.removeObserver(directiveReceiveObserver)
         }
         
         contextManager.removeProvider(contextInfoProvider)
@@ -272,7 +278,7 @@ public extension ASRAgent {
                 completion?(.error(ASRError.listenFailed))
                 return
             }
-         
+            
             startRecognition(
                 initiator: initiator,
                 eventIdentifier: eventIdentifier,
@@ -329,15 +335,15 @@ extension ASRAgent: FocusChannelDelegate {
     public func focusChannelDidChange(focusState: FocusState) {
         asrDispatchQueue.async { [weak self] in
             guard let self = self else { return }
-
+            
             log.info("focus: \(focusState) asr state: \(self.asrState)")
             switch (focusState, self.asrState) {
             case (.foreground, let asrState) where [.idle, .expectingSpeech].contains(asrState):
                 self.executeStartCapture()
-            // Ignore (foreground, [listening, recognizing, busy])
+                // Ignore (foreground, [listening, recognizing, busy])
             case (.foreground, _):
                 break
-            // Not permitted background
+                // Not permitted background
             case (_, let asrState) where [.listening(), .recognizing].contains(asrState):
                 self.asrResult = .cancel()
             case (_, .expectingSpeech):
@@ -345,7 +351,7 @@ extension ASRAgent: FocusChannelDelegate {
             case (.nothing, .idle) where self.asrRequest != nil:
                 // It might be error when focusState is nothing And AsrRequest does exist.
                 self.asrResult = .error(ASRError.listenFailed)
-            // Ignore prepare
+                // Ignore prepare
             default:
                 break
             }
@@ -426,7 +432,7 @@ private extension ASRAgent {
     func prefetchExpectSpeech() -> PrefetchDirective {
         return { [weak self] directive in
             let payload = try JSONDecoder().decode(ASRExpectSpeech.Payload.self, from: directive.payload)
-
+            
             self?.asrDispatchQueue.async { [weak self] in
                 guard let self = self else { return }
                 if let playServiceId = payload.playServiceId {
@@ -450,7 +456,7 @@ private extension ASRAgent {
             }
         }
     }
-
+    
     func handleExpectSpeech() -> HandleDirective {
         return { [weak self] directive, completion in
             defer { completion(.finished) }
@@ -503,7 +509,7 @@ private extension ASRAgent {
                 return
             }
             defer { completion(.finished) }
-
+            
             self?.asrDispatchQueue.async { [weak self] in
                 guard let self = self else { return }
                 
@@ -621,7 +627,7 @@ private extension ASRAgent {
                 eventIdentifier: asrRequest.eventIdentifier,
                 httpHeaderFields: httpHeaderFields,
                 contextPayload: asrRequest.contextPayload
-        )) { [weak self] (state) in
+            )) { [weak self] (state) in
                 self?.asrDispatchQueue.async { [weak self] in
                     guard self?.asrRequest?.eventIdentifier == asrRequest.eventIdentifier else { return }
                     
@@ -639,7 +645,7 @@ private extension ASRAgent {
                     
                     asrRequest.completion?(state)
                 }
-        }
+            }
         
         attachmentSeq = 0
         switch asrRequest.options.endPointing {
@@ -649,18 +655,18 @@ private extension ASRAgent {
             // TODO: after server preparation.
             log.error("Server side end point detector does not support yet.")
             asrResult = .error(ASRError.listenFailed)
-//            endPointDetector = ServerEndPointDetector(asrOptions: asrRequest.options)
-//
-//            // send wake up voice data
-//            if case let .wakeUpWord(_, data, _, _, _) = asrRequest.options.initiator {
-//                do {
-//                    let speexData = try SpeexEncoder(sampleRate: Int(asrRequest.options.sampleRate), inputType: .linearPcm16).encode(data: data)
-//
-//                    endPointDetectorSpeechDataExtracted(speechData: speexData)
-//                } catch {
-//                    log.error(error)
-//                }
-//            }
+            //            endPointDetector = ServerEndPointDetector(asrOptions: asrRequest.options)
+            //
+            //            // send wake up voice data
+            //            if case let .wakeUpWord(_, data, _, _, _) = asrRequest.options.initiator {
+            //                do {
+            //                    let speexData = try SpeexEncoder(sampleRate: Int(asrRequest.options.sampleRate), inputType: .linearPcm16).encode(data: data)
+            //
+            //                    endPointDetectorSpeechDataExtracted(speechData: speexData)
+            //                } catch {
+            //                    log.error(error)
+            //                }
+            //            }
         }
         endPointDetector?.delegate = self
         endPointDetector?.start()
@@ -682,7 +688,7 @@ private extension ASRAgent {
         }
         
         asrState = .busy
-
+        
         let attachment = Attachment(typeInfo: .recognize).makeAttachmentMessage(
             property: self.capabilityAgentProperty,
             dialogRequestId: asrRequest.eventIdentifier.dialogRequestId,
@@ -752,10 +758,10 @@ public extension NuguAgentNotification {
         public struct StartRecognition: TypedNotification {
             public static let name: Notification.Name = .asrAgentStartRecognition
             public let dialogRequestId: String
-
+            
             public static func make(from: [String: Any]) -> StartRecognition? {
                 guard let dialogRequestId = from["dialogRequestId"] as? String else { return nil }
-
+                
                 return StartRecognition(dialogRequestId: dialogRequestId)
             }
         }
@@ -794,6 +800,30 @@ private extension ASRAgent {
                 guard notification.property == self.playSyncProperty, self.expectSpeech?.messageId == notification.messageId else { return }
                 
                 self.stopRecognition()
+            }
+        }
+    }
+    
+    func addStreamDataObserver(_ streamDataRouter: StreamDataRoutable) {
+        directiveReceiveObserver = streamDataRouter.observe(NuguCoreNotification.StreamDataRoute.ReceivedDirectives.self, queue: nil) { [weak self] (notification) in
+            self?.asrDispatchQueue.async { [weak self] in
+                guard let self else { return }
+                guard let dialogRequestId = asrRequest?.eventIdentifier.dialogRequestId else { return }
+                let asyncState = notification.directives
+                    .compactMap { directive -> AsyncKey? in
+                        guard let asyncKey = directive.payloadDictionary?["asyncKey"] as? [String: AnyHashable] else { return nil }
+                        return try? JSONDecoder().decode(AsyncKey.self, from: asyncKey)
+                    }
+                    .filter { $0.eventDialogRequestId == dialogRequestId }
+                    .map(\.state)
+                    .first
+                
+                guard let asyncState = asyncState,
+                      asyncState == .end,
+                      asrState == .busy else {
+                    return
+                }
+                asrState = .idle
             }
         }
     }

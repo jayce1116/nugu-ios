@@ -45,7 +45,8 @@ public extension NuguClient {
             dialogAttributeStore: dialogAttributeStore,
             sessionManager: sessionManager,
             playSyncManager: playSyncManager,
-            interactionControlManager: interactionControlManager
+            interactionControlManager: interactionControlManager,
+            streamDataRouter: streamDataRouter
         )
         
         public lazy var ttsAgent: TTSAgentProtocol = TTSAgent(
