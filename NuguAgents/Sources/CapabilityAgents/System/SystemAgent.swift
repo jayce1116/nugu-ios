@@ -37,15 +37,15 @@ public final class SystemAgent: SystemAgentProtocol {
     
     // Handleable Directive
     private lazy var handleableDirectiveInfos = [
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "HandoffConnection", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleHandOffConnection),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "UpdateState", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleUpdateState),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Exception", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleException),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Revoke", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleRevoke),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "NoDirectives", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleNoDirectives),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Noop", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: { { $1(.finished) } }),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "ResetConnection", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleResetConnection),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "TerminateApp", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleTerminateApp),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "RequireUpdate", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleRequireUpdate)
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "HandoffConnection", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleHandOffConnection),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "UpdateState", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleUpdateState),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Exception", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleException),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Revoke", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleRevoke),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "NoDirectives", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleNoDirectives),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Noop", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: { { $1(.finished) } }),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "ResetConnection", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleResetConnection),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "TerminateApp", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleTerminateApp),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "RequireUpdate", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleRequireUpdate)
     ]
     
     private var disposeBag = DisposeBag()

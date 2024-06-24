@@ -51,10 +51,10 @@ public final class RoutineAgent: RoutineAgentProtocol {
     
     // Handleable Directive
     private lazy var handleableDirectiveInfos = [
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Start", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleStart),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Stop", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleStop),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Continue", blockingPolicy: BlockingPolicy(medium: .audio, isBlocking: false), directiveHandler: handleContinue),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Move", blockingPolicy: BlockingPolicy(medium: .audio, isBlocking: false), directiveHandler: handleMove)
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Start", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleStart),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Stop", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleStop),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Continue", blockingPolicy: BlockingPolicy(blockedBy: .audio, blocking: nil), directiveHandler: handleContinue),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Move", blockingPolicy: BlockingPolicy(blockedBy: .audio, blocking: nil), directiveHandler: handleMove)
     ]
     
     private var disposeBag = DisposeBag()

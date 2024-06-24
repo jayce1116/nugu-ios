@@ -44,9 +44,9 @@ public class PhoneCallAgent: PhoneCallAgentProtocol {
     
     // Handleable Directive
     private lazy var handleableDirectiveInfos: [DirectiveHandleInfo] = [
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "SendCandidates", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleSendCandidates),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "MakeCall", blockingPolicy: BlockingPolicy(medium: .audio, isBlocking: false), preFetch: prefetchMakeCall, directiveHandler: handleMakeCall),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "BlockNumber", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleBlockNumber)
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "SendCandidates", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleSendCandidates),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "MakeCall", blockingPolicy: BlockingPolicy(blockedBy: .audio, blocking: nil), preFetch: prefetchMakeCall, directiveHandler: handleMakeCall),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "BlockNumber", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleBlockNumber)
     ]
     
     private var disposeBag = DisposeBag()

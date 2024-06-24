@@ -143,7 +143,7 @@ public final class TTSAgent: TTSAgentProtocol {
         DirectiveHandleInfo(
             namespace: capabilityAgentProperty.name,
             name: "Speak",
-            blockingPolicy: BlockingPolicy(medium: .audio, isBlocking: true),
+            blockingPolicy: BlockingPolicy(blockedBy: .audio, blocking: .audioOnly),
             preFetch: prefetchPlay,
             cancelDirective: cancelPlay,
             directiveHandler: handlePlay,
@@ -152,7 +152,7 @@ public final class TTSAgent: TTSAgentProtocol {
         DirectiveHandleInfo(
             namespace: capabilityAgentProperty.name,
             name: "Stop",
-            blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false),
+            blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil),
             directiveHandler: handleStop
         )
     ]

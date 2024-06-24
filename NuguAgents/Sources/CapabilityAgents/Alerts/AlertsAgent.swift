@@ -38,13 +38,13 @@ public class AlertsAgent: AlertsAgentProtocol {
     
     // Handleable Directive
     private lazy var handleableDirectiveInfos: [DirectiveHandleInfo] = [
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "SetAlert", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleSetAlert),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "DeleteAlerts", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleDeleteAlerts),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "DeliveryAlertAsset", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleDeliveryAlertAsset),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "SetSnooze", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleSetSnooze),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "SkipNextAlert", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleSkipNextAlert),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "SetHookEvents", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleSetHookEvents),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "DeleteHookEvents", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleDeleteHookEvents)
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "SetAlert", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleSetAlert),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "DeleteAlerts", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleDeleteAlerts),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "DeliveryAlertAsset", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleDeliveryAlertAsset),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "SetSnooze", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleSetSnooze),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "SkipNextAlert", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleSkipNextAlert),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "SetHookEvents", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleSetHookEvents),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "DeleteHookEvents", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleDeleteHookEvents)
     ]
     
     public init(

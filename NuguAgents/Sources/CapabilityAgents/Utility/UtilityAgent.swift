@@ -35,7 +35,7 @@ public class UtilityAgent: UtilityAgentProtocol {
         DirectiveHandleInfo(
             namespace: capabilityAgentProperty.name,
             name: "Block",
-            blockingPolicy: BlockingPolicy(medium: .any, isBlocking: true),
+            blockingPolicy: BlockingPolicy(blockedBy: .all, blocking: .all),
             directiveHandler: handleBlock
         )
     ]

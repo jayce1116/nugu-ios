@@ -20,27 +20,28 @@
 
 import Foundation
 
-/// <#Description#>
 public struct BlockingPolicy {
-    /// <#Description#>
-    public let medium: Medium
-    /// <#Description#>
-    public let isBlocking: Bool
+    public let blockedBy: Set<Medium>?
+    public let blocking: Set<Medium>?
     
-    /// <#Description#>
-    /// - Parameters:
-    ///   - medium: <#medium description#>
-    ///   - isBlocking: <#isBlocking description#>
-    public init(medium: Medium, isBlocking: Bool) {
-        self.medium = medium
-        self.isBlocking = isBlocking
+    public init(blockedBy: Set<Medium>? = nil, blocking: Set<Medium>? = nil) {
+        self.blockedBy = blockedBy
+        self.blocking = blocking
     }
     
-    /// <#Description#>
     public enum Medium: CaseIterable {
-        case none
         case audio
         case visual
         case any
     }
+}
+
+public extension Set where Element == BlockingPolicy.Medium {
+    static let all: Set<Element> = [.audio, .visual, .any]
+    static let any: Set<Element> = [.any]
+    static let audio: Set<Element> = [.audio, .any]
+    static let audioOnly: Set<Element> = [.audio]
+    static let visual: Set<Element> = [.visual, .any]
+    static let visualOnly: Set<Element> = [.visual]
+    static let audioAndVisual: Set<Element> = [.audio, .visual]
 }

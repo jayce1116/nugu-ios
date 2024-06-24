@@ -187,7 +187,7 @@ public final class ASRAgent: ASRAgentProtocol {
         DirectiveHandleInfo(
             namespace: capabilityAgentProperty.name,
             name: "ExpectSpeech",
-            blockingPolicy: BlockingPolicy(medium: .audio, isBlocking: true),
+            blockingPolicy: BlockingPolicy(blockedBy: .audio, blocking: .audioOnly),
             preFetch: prefetchExpectSpeech,
             cancelDirective: cancelExpectSpeech,
             directiveHandler: handleExpectSpeech
@@ -195,13 +195,13 @@ public final class ASRAgent: ASRAgentProtocol {
         DirectiveHandleInfo(
             namespace: capabilityAgentProperty.name,
             name: "NotifyResult",
-            blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false),
+            blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil),
             directiveHandler: handleNotifyResult
         ),
         DirectiveHandleInfo(
             namespace: capabilityAgentProperty.name,
             name: "CancelRecognize",
-            blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false),
+            blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil),
             directiveHandler: handleCancelRecognize
         )
     ]

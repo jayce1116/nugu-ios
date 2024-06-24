@@ -60,11 +60,11 @@ public final class DisplayAgent: DisplayAgentProtocol {
     
     // Handleable Directives
     private lazy var handleableDirectiveInfos = [
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Close", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleClose),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "ControlFocus", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleControlFocus),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "ControlScroll", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleControlScroll),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Update", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleUpdate),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "RedirectTriggerChild", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleRedirectTriggerChild)
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Close", blockingPolicy: BlockingPolicy(blockedBy: .audio, blocking: .audioAndVisual), directiveHandler: handleClose),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "ControlFocus", blockingPolicy: BlockingPolicy(blockedBy: .audio, blocking: .audioAndVisual), directiveHandler: handleControlFocus),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "ControlScroll", blockingPolicy: BlockingPolicy(blockedBy: .audio, blocking: .audioAndVisual), directiveHandler: handleControlScroll),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Update", blockingPolicy: BlockingPolicy(blockedBy: .audio, blocking: .audioAndVisual), directiveHandler: handleUpdate),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "RedirectTriggerChild", blockingPolicy: BlockingPolicy(blockedBy: .audio, blocking: .audioAndVisual), directiveHandler: handleRedirectTriggerChild)
     ] + [
         "FullText1", "FullText2", "FullText3",
         "ImageText1", "ImageText2", "ImageText3", "ImageText4", "ImageText5",
@@ -84,7 +84,7 @@ public final class DisplayAgent: DisplayAgentProtocol {
         DirectiveHandleInfo(
             namespace: capabilityAgentProperty.name,
             name: name,
-            blockingPolicy: BlockingPolicy(medium: .audio, isBlocking: true),
+            blockingPolicy: BlockingPolicy(blockedBy: .audio, blocking: .audioAndVisual),
             preFetch: prefetchDisplay,
             directiveHandler: handleDisplay
         )

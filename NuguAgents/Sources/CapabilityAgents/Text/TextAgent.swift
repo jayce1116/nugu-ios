@@ -44,19 +44,19 @@ public final class TextAgent: TextAgentProtocol {
         DirectiveHandleInfo(
             namespace: capabilityAgentProperty.name,
             name: "TextSource",
-            blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false),
+            blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil),
             directiveHandler: handleTextSource
         ),
         DirectiveHandleInfo(
             namespace: capabilityAgentProperty.name,
             name: "TextRedirect",
-            blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false),
+            blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil),
             directiveHandler: handleTextRedirect
         ),
         DirectiveHandleInfo(
             namespace: capabilityAgentProperty.name,
             name: "ExpectTyping",
-            blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false),
+            blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil),
             directiveHandler: handleExpectTyping
         )
     ]
