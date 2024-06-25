@@ -35,7 +35,12 @@ public class PermissionAgent: PermissionAgentProtocol {
     
     // Handleable Directive
     private lazy var handleableDirectiveInfos = [
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "RequestPermission", blockingPolicy: BlockingPolicy(blockedBy: .audio, blocking: nil), directiveHandler: handleRequestPermission)
+        DirectiveHandleInfo(
+            namespace: capabilityAgentProperty.name,
+            name: "RequestPermission",
+            blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil),
+            directiveHandler: handleRequestPermission
+        )
     ]
     
     public init(
