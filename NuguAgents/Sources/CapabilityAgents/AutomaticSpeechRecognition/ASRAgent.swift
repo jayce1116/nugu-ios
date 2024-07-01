@@ -53,6 +53,7 @@ public final class ASRAgent: ASRAgentProtocol {
     }()
     
     private var endPointDetector: EndPointDetectable?
+    private var pendingStateDialogRequestId: String?
     
     private let asrDispatchQueue = DispatchQueue(label: "com.sktelecom.romaine.asr_agent", qos: .userInitiated)
     
@@ -69,6 +70,7 @@ public final class ASRAgent: ASRAgentProtocol {
             // `ASRRequest` -> `FocusState` -> EndPointDetector` -> `ASRAgentDelegate`
             // release asrRequest
             if asrState == .idle {
+                pendingStateDialogRequestId = nil
                 asrRequest = nil
                 releaseFocusIfNeeded()
             }
@@ -214,8 +216,7 @@ public final class ASRAgent: ASRAgentProtocol {
         dialogAttributeStore: DialogAttributeStoreable,
         sessionManager: SessionManageable,
         playSyncManager: PlaySyncManageable,
-        interactionControlManager: InteractionControlManageable,
-        streamDataRouter: StreamDataRoutable
+        interactionControlManager: InteractionControlManageable
     ) {
         self.focusManager = focusManager
         self.upstreamDataSender = upstreamDataSender
@@ -227,7 +228,6 @@ public final class ASRAgent: ASRAgentProtocol {
         self.interactionControlManager = interactionControlManager
         
         addPlaySyncObserver(playSyncManager)
-        addStreamDataObserver(streamDataRouter)
         contextManager.addProvider(contextInfoProvider)
         focusManager.add(channelDelegate: self)
         directiveSequencer.add(directiveHandleInfos: handleableDirectiveInfos.asDictionary)
@@ -504,21 +504,22 @@ private extension ASRAgent {
     
     func handleNotifyResult() -> HandleDirective {
         return { [weak self] directive, completion in
-            guard let item = try? JSONDecoder().decode(ASRNotifyResult.self, from: directive.payload) else {
-                completion(.failed("Invalid payload"))
-                return
-            }
-            defer { completion(.finished) }
-            
             self?.asrDispatchQueue.async { [weak self] in
                 guard let self = self else { return }
-                
+                guard let item = try? JSONDecoder().decode(ASRNotifyResult.self, from: directive.payload) else {
+                    completion(.failed("Invalid payload"))
+                    return
+                }
+                defer { completion(.finished) }
                 self.endPointDetector?.handleNotifyResult(item.state)
                 switch item.state {
                 case .partial:
                     self.asrResult = .partial(text: item.result ?? "", header: directive.header)
                 case .complete:
                     self.asrResult = .complete(text: item.result ?? "", header: directive.header, requestType: item.requestType)
+                    if pendingStateDialogRequestId == directive.header.dialogRequestId {
+                        asrState = .idle
+                    }
                 case .none:
                     self.asrResult = .none(header: directive.header)
                 case .error:
@@ -629,16 +630,29 @@ private extension ASRAgent {
                 contextPayload: asrRequest.contextPayload
             )) { [weak self] (state) in
                 self?.asrDispatchQueue.async { [weak self] in
-                    guard self?.asrRequest?.eventIdentifier == asrRequest.eventIdentifier else { return }
+                    guard let self else { return }
+                    guard self.asrRequest?.eventIdentifier == asrRequest.eventIdentifier else { return }
                     
                     switch state {
                     case .error(let error):
-                        self?.asrResult = .error(error)
+                        self.asrResult = .error(error)
                     case .sent:
-                        self?.asrState = .listening(initiator: asrRequest.initiator)
-                        if let formatter = self?.eventTimeFormatter {
-                            UserDefaults.Nugu.lastAsrEventTime = formatter.string(from: Date())
+                        self.asrState = .listening(initiator: asrRequest.initiator)
+                        UserDefaults.Nugu.lastAsrEventTime = eventTimeFormatter.string(from: Date())
+                    case let .received(part):
+                        guard part.header.namespace != capabilityAgentProperty.category.name else { return }
+                        guard ["Adot.AckMessage"].contains(part.header.type) == false else { return }
+                        guard let data = part.payloadDictionary?["asyncKey"] as? [String: AnyHashable],
+                              let asyncKey = try? JSONDecoder().decode(AsyncKey.self, from: data) else {
+                            if case .complete = asrResult {
+                                asrState = .idle
+                            } else if part.header.dialogRequestId == asrRequest.eventIdentifier.dialogRequestId {
+                                pendingStateDialogRequestId = part.header.dialogRequestId
+                            }
+                            return
                         }
+                        guard asyncKey.state == .end else { return }
+                        asrState = .idle
                     default:
                         break
                     }
@@ -800,30 +814,6 @@ private extension ASRAgent {
                 guard notification.property == self.playSyncProperty, self.expectSpeech?.messageId == notification.messageId else { return }
                 
                 self.stopRecognition()
-            }
-        }
-    }
-    
-    func addStreamDataObserver(_ streamDataRouter: StreamDataRoutable) {
-        directiveReceiveObserver = streamDataRouter.observe(NuguCoreNotification.StreamDataRoute.ReceivedDirectives.self, queue: nil) { [weak self] (notification) in
-            self?.asrDispatchQueue.async { [weak self] in
-                guard let self else { return }
-                guard let dialogRequestId = asrRequest?.eventIdentifier.dialogRequestId else { return }
-                let asyncState = notification.directives
-                    .compactMap { directive -> AsyncKey? in
-                        guard let asyncKey = directive.payloadDictionary?["asyncKey"] as? [String: AnyHashable] else { return nil }
-                        return try? JSONDecoder().decode(AsyncKey.self, from: asyncKey)
-                    }
-                    .filter { $0.eventDialogRequestId == dialogRequestId }
-                    .map(\.state)
-                    .first
-                
-                guard let asyncState = asyncState,
-                      asyncState == .end,
-                      asrState == .busy else {
-                    return
-                }
-                asrState = .idle
             }
         }
     }
