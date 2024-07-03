@@ -38,7 +38,7 @@ public class PermissionAgent: PermissionAgentProtocol {
         DirectiveHandleInfo(
             namespace: capabilityAgentProperty.name,
             name: "RequestPermission",
-            blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil),
+            blockingPolicy: BlockingPolicy(blockedBy: .audio, blocking: nil),
             directiveHandler: handleRequestPermission
         )
     ]

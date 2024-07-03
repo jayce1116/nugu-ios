@@ -161,10 +161,10 @@ private extension DirectiveSequencer {
             return false
         }
         
-        guard let blockingPolicies = blockingPolicy.blocking else { return false }
+        guard let blockingPolicies = blockingPolicy.blockedBy else { return false }
         
         return directives[0..<targetDirectiveCount]
-            .compactMap { $0.blockingPolicy.blockedBy }
+            .compactMap { $0.blockingPolicy.blocking }
             .contains { policies in
                 for blockingPolicy in blockingPolicies {
                     if policies.contains(blockingPolicy) {

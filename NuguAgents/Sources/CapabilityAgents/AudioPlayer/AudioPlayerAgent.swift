@@ -500,11 +500,6 @@ private extension AudioPlayerAgent {
                         duration: NuguTimeInterval(seconds: 7)
                     )
                 )
-                
-                self.audioPlayerDisplayManager.display(
-                    payload: player.payload,
-                    header: directive.header
-                )
             }
         }
     }
@@ -537,6 +532,12 @@ private extension AudioPlayerAgent {
                     player.replacePlayer(currentPlayer)
                 }
                 self.currentPlayer = player
+                
+                self.audioPlayerDisplayManager.display(
+                    payload: player.payload,
+                    header: directive.header
+                )
+                
                 self.focusManager.requestFocus(channelDelegate: self)
                 
                 completion(.finished) // TODO: DirectiveHandleResult.started 추가
