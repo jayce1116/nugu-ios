@@ -70,9 +70,18 @@ public final class ASRAgent: ASRAgentProtocol {
             // `ASRRequest` -> `FocusState` -> EndPointDetector` -> `ASRAgentDelegate`
             // release asrRequest
             if asrState == .idle {
-                pendingStateDialogRequestId = nil
-                asrRequest = nil
-                releaseFocusIfNeeded()
+                switch asrResult {
+                case let .cancel(_, dialogRequestId):
+                    guard let cancelDialogRequestId = dialogRequestId else { fallthrough }
+                    guard asrRequest?.eventIdentifier.dialogRequestId == cancelDialogRequestId else { 
+                        log.info("asrRequest's dialogRequestId is not correspond cancel dialogRequestId")
+                        break
+                    }
+                default:
+                    pendingStateDialogRequestId = nil
+                    asrRequest = nil
+                    releaseFocusIfNeeded()
+                }
             }
             
             // Stop EPD
@@ -316,7 +325,7 @@ public extension ASRAgent {
             
             self.expectSpeech = nil
             if self.asrState != .idle {
-                self.asrResult = .cancel()
+                self.asrResult = .cancel(dialogRequestId: asrRequest?.eventIdentifier.dialogRequestId)
             }
         }
     }
