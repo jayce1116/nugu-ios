@@ -73,10 +73,11 @@ public final class ASRAgent: ASRAgentProtocol {
                 switch asrResult {
                 case let .cancel(_, dialogRequestId):
                     guard let cancelDialogRequestId = dialogRequestId else { fallthrough }
-                    guard asrRequest?.eventIdentifier.dialogRequestId == cancelDialogRequestId else { 
+                    guard asrRequest?.eventIdentifier.dialogRequestId == cancelDialogRequestId else {
                         log.info("asrRequest's dialogRequestId is not correspond cancel dialogRequestId")
                         break
                     }
+                    fallthrough
                 default:
                     pendingStateDialogRequestId = nil
                     asrRequest = nil
@@ -120,6 +121,7 @@ public final class ASRAgent: ASRAgentProtocol {
             case .cancel:
                 asrState = .idle
                 upstreamDataSender.cancelEvent(dialogRequestId: asrRequest.eventIdentifier.dialogRequestId)
+                directiveSequencer.cancelDirective(dialogRequestId: asrRequest.eventIdentifier.dialogRequestId)
                 sendCompactContextEvent(Event(
                     typeInfo: .stopRecognize,
                     dialogAttributes: expectSpeech?.messageId == nil ? nil : dialogAttributeStore.getAttributes(key: expectSpeech!.messageId),
@@ -128,6 +130,7 @@ public final class ASRAgent: ASRAgentProtocol {
                 expectSpeech = nil
             case .cancelExpectSpeech:
                 asrState = .idle
+                directiveSequencer.cancelDirective(dialogRequestId: asrRequest.eventIdentifier.dialogRequestId)
                 sendCompactContextEvent(Event(
                     typeInfo: .listenFailed,
                     dialogAttributes: expectSpeech?.messageId == nil ? nil : dialogAttributeStore.getAttributes(key: expectSpeech!.messageId),
