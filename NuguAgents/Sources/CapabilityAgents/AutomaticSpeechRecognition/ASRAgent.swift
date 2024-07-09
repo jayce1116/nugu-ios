@@ -115,7 +115,8 @@ public final class ASRAgent: ASRAgentProtocol {
                 asrState = .idle
                 expectSpeech = nil
             case .partial:
-                break
+                guard case .listening = asrState else { break }
+                asrState = .recognizing
             case .complete:
                 expectSpeech = nil
             case .cancel:
