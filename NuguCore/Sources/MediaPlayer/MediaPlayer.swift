@@ -78,6 +78,10 @@ extension MediaPlayer {
             return
         }
         
+        if let cacheKey = playerItem?.cacheKey {
+            MediaCacheManager.setModifiedDateForCacheFile(key: cacheKey)
+        }
+        
         mediaPlayer.replaceCurrentItem(with: nil)
         removePlayerItemObserver()  // CHECK-ME: 타이밍 이슈 없을지 확인
         
@@ -448,11 +452,6 @@ private extension MediaPlayer {
             log.debug("playback status changed to: \(notification)")
             
             switch notification {
-            case .readyToPlay:
-                if let cacheKey = object.cacheKey {
-                    MediaCacheManager.setModifiedDateForCacheFile(key: cacheKey)
-                }
-                
             case .failed:
                 log.debug("playback failed reason: \(object.error.debugDescription)")
                 self.delegate?.mediaPlayerStateDidChange(.error(error: object.error ?? MediaPlayableError.unknown), mediaPlayer: self)
