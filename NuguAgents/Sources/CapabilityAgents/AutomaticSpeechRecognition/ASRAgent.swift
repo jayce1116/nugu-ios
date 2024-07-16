@@ -53,7 +53,6 @@ public final class ASRAgent: ASRAgentProtocol {
     }()
     
     private var endPointDetector: EndPointDetectable?
-    private var pendingStateDialogRequestId: String?
     
     private let asrDispatchQueue = DispatchQueue(label: "com.sktelecom.romaine.asr_agent", qos: .userInitiated)
     
@@ -79,7 +78,6 @@ public final class ASRAgent: ASRAgentProtocol {
                     }
                     fallthrough
                 default:
-                    pendingStateDialogRequestId = nil
                     asrRequest = nil
                     releaseFocusIfNeeded()
                 }
@@ -526,9 +524,6 @@ private extension ASRAgent {
                     self.asrResult = .partial(text: item.result ?? "", header: directive.header)
                 case .complete:
                     self.asrResult = .complete(text: item.result ?? "", header: directive.header, requestType: item.requestType)
-                    if pendingStateDialogRequestId == directive.header.dialogRequestId {
-                        asrState = .idle
-                    }
                 case .none:
                     self.asrResult = .none(header: directive.header)
                 case .error:
@@ -649,18 +644,10 @@ private extension ASRAgent {
                         self.asrState = .listening(initiator: asrRequest.initiator)
                         UserDefaults.Nugu.lastAsrEventTime = eventTimeFormatter.string(from: Date())
                     case let .received(part):
-                        guard part.header.namespace != capabilityAgentProperty.category.name else { return }
-                        guard ["Adot.AckMessage"].contains(part.header.type) == false else { return }
-                        guard let data = part.payloadDictionary?["asyncKey"] as? [String: AnyHashable],
-                              let asyncKey = try? JSONDecoder().decode(AsyncKey.self, from: data) else {
-                            if case .complete = asrResult {
-                                asrState = .idle
-                            } else if part.header.dialogRequestId == asrRequest.eventIdentifier.dialogRequestId {
-                                pendingStateDialogRequestId = part.header.dialogRequestId
-                            }
+                        guard part.header.namespace != capabilityAgentProperty.category.name else {
+                            asrRequest.completion?(state)
                             return
                         }
-                        guard asyncKey.state == .end else { return }
                         asrState = .idle
                     default:
                         break
