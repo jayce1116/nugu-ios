@@ -53,7 +53,7 @@ public class NudgeAgent: NudgeAgentProtocol {
     
     // Handleable Directive
     private lazy var handleableDirectiveInfos = [
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Append", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), preFetch: prefetchAppend, directiveHandler: dummyHandler)
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Append", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), preFetch: prefetchAppend, directiveHandler: dummyHandler)
     ]
     
     public init(

@@ -33,7 +33,7 @@ public final class SessionAgent: SessionAgentProtocol {
     
     // Handleable Directive
     private lazy var handleableDirectiveInfos = [
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Set", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleSet)
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Set", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleSet)
     ]
     
     public init(

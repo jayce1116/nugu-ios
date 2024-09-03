@@ -36,19 +36,19 @@ public final class MediaPlayerAgent: MediaPlayerAgentProtocol {
     
     // Handleable Directives
     private lazy var handleableDirectiveInfos = [
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Play", blockingPolicy: BlockingPolicy(medium: .audio, isBlocking: false), directiveHandler: handlePlay),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Stop", blockingPolicy: BlockingPolicy(medium: .audio, isBlocking: false), directiveHandler: handleStop),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Search", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleSearch),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Previous", blockingPolicy: BlockingPolicy(medium: .audio, isBlocking: false), directiveHandler: handlePrevious),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Next", blockingPolicy: BlockingPolicy(medium: .audio, isBlocking: false), directiveHandler: handleNext),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Move", blockingPolicy: BlockingPolicy(medium: .audio, isBlocking: false), directiveHandler: handleMove),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Pause", blockingPolicy: BlockingPolicy(medium: .audio, isBlocking: false), directiveHandler: handlePause),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Resume", blockingPolicy: BlockingPolicy(medium: .audio, isBlocking: false), directiveHandler: handleResume),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Rewind", blockingPolicy: BlockingPolicy(medium: .audio, isBlocking: false), directiveHandler: handleRewind),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Toggle", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleToggle),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "GetInfo", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleGetInfo),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "HandlePlaylist", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handlePlaylist),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "HandleLyrics", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleLyrics)
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Play", blockingPolicy: BlockingPolicy(blockedBy: .audio, blocking: nil), directiveHandler: handlePlay),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Stop", blockingPolicy: BlockingPolicy(blockedBy: .audio, blocking: nil), directiveHandler: handleStop),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Search", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleSearch),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Previous", blockingPolicy: BlockingPolicy(blockedBy: .audio, blocking: nil), directiveHandler: handlePrevious),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Next", blockingPolicy: BlockingPolicy(blockedBy: .audio, blocking: nil), directiveHandler: handleNext),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Move", blockingPolicy: BlockingPolicy(blockedBy: .audio, blocking: nil), directiveHandler: handleMove),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Pause", blockingPolicy: BlockingPolicy(blockedBy: .audio, blocking: nil), directiveHandler: handlePause),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Resume", blockingPolicy: BlockingPolicy(blockedBy: .audio, blocking: nil), directiveHandler: handleResume),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Rewind", blockingPolicy: BlockingPolicy(blockedBy: .audio, blocking: nil), directiveHandler: handleRewind),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Toggle", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleToggle),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "GetInfo", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleGetInfo),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "HandlePlaylist", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handlePlaylist),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "HandleLyrics", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleLyrics)
     ]
     
     private lazy var disposeBag = DisposeBag()

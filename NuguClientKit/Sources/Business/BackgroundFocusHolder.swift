@@ -186,7 +186,7 @@ private extension BackgroundFocusHolder {
             self?.queue.async { [weak self] in
                 guard let self = self else { return }
                 
-                if notification.blockingPolicy.medium == .audio, notification.blockingPolicy.isBlocking {
+                if notification.blockingPolicy.blockedBy == .audio, notification.blockingPolicy.blocking == .audioOnly {
                     self.handlingSoundDirectives.insert(notification.directive.header.messageId)
                     self.requestFocus()
                 }

@@ -36,15 +36,15 @@ public class MessengerAgent: MessengerAgentProtocol {
     
     // Handleable Directive
     private lazy var handleableDirectiveInfos: [DirectiveHandleInfo] = [
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "CreateSucceeded", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleCreateSucceeded),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Configure", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleConfigure),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "SendHistory", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleSendHistory),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "NotifyMessage", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleNotifyMessage),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "NotifyStartDialog", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleNotifyStartDialog),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "NotifyStopDialog", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleNotifyStopDialog),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "NotifyRead", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleNotifyRead),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "NotifyReaction", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleNotifyReaction),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "MessageRedirect", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleMessageRedirect)
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "CreateSucceeded", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleCreateSucceeded),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Configure", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleConfigure),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "SendHistory", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleSendHistory),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "NotifyMessage", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleNotifyMessage),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "NotifyStartDialog", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleNotifyStartDialog),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "NotifyStopDialog", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleNotifyStopDialog),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "NotifyRead", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleNotifyRead),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "NotifyReaction", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleNotifyReaction),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "MessageRedirect", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleMessageRedirect)
     ]
     
     private lazy var disposeBag = DisposeBag()

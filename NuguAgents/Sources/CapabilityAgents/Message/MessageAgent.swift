@@ -42,8 +42,8 @@ public final class MessageAgent: MessageAgentProtocol {
     
     // Handleable Directive
     private lazy var handleableDirectiveInfos: [DirectiveHandleInfo] = [
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "SendCandidates", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleSendCandidates),
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "SendMessage", blockingPolicy: BlockingPolicy(medium: .none, isBlocking: false), directiveHandler: handleSendMessage)
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "SendCandidates", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleSendCandidates),
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "SendMessage", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: nil), directiveHandler: handleSendMessage)
     ]
     
     deinit {

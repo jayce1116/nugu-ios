@@ -19,20 +19,15 @@
 //
 
 import Foundation
+import Combine
 
 import NuguUtils
 
-import RxSwift
-
 public class ContextManager: ContextManageable {
     private let contextDispatchQueue = DispatchQueue(label: "com.sktelecom.romaine.context_manager", qos: .userInitiated)
-    private lazy var contextScheduler = SerialDispatchQueueScheduler(
-        queue: contextDispatchQueue,
-        internalSerialQueueName: "com.sktelecom.romaine.context_manager"
-    )
     
     @Atomic private var providers = [ContextInfoProviderType?]()
-    private let disposeBag = DisposeBag()
+    private var cancellables = Set<AnyCancellable>()
 
     public init() {}
 }
@@ -54,7 +49,7 @@ extension ContextManager {
     
     public func getContexts(namespace: String, completion: @escaping ([ContextInfo]) -> Void) {
         getContexts { contextInfos in
-            let filteredPayload = contextInfos.compactMap { (contextInfo) -> ContextInfo? in
+            let filteredPayload = contextInfos.compactMap { contextInfo -> ContextInfo? in
                 if contextInfo.contextType == .client || contextInfo.name == namespace {
                     return contextInfo
                 } else {
@@ -73,34 +68,31 @@ extension ContextManager {
     }
     
     public func getContexts(completion: @escaping ([ContextInfo]) -> Void) {
-        var requests = [Single<ContextInfo?>]()
+        var requests = [AnyPublisher<ContextInfo?, Never>]()
         providers.compactMap { $0 }.forEach { (provider) in
             requests.append(getContext(from: provider))
         }
         
-        Single<ContextInfo?>.zip(requests)
-            .subscribe(on: contextScheduler)
-            .map { (contextInfos) -> [ContextInfo] in
+        Publishers.ZipMany(requests)
+            .subscribe(on: contextDispatchQueue)
+            .map { contextInfos -> [ContextInfo] in
                 return contextInfos.compactMap { $0 }
             }
-            .subscribe(
-                onSuccess: { (contextInfos) in
-                    completion(contextInfos)
-            })
-            .disposed(by: disposeBag)
+            .sink { contextInfos in
+                completion(contextInfos)
+            }
+            .store(in: &cancellables)
     }
 }
 
 // MARK: - Private
 
 private extension ContextManager {
-    func getContext(from provider: @escaping ContextInfoProviderType) -> Single<ContextInfo?> {
-        return Single<ContextInfo?>.create { event -> Disposable in
-            provider { (contextInfo) in
-                event(.success(contextInfo))
+    func getContext(from provider: @escaping ContextInfoProviderType) -> AnyPublisher<ContextInfo?, Never> {
+        Future<ContextInfo?, Never> { promise in
+            provider { contextInfo in
+                promise(.success(contextInfo))
             }
-            
-            return Disposables.create()
-        }
+        }.eraseToAnyPublisher()
     }
 }

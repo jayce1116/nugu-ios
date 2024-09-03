@@ -72,7 +72,7 @@ public final class SoundAgent: SoundAgentProtocol {
     
     // Handleable Directives
     private lazy var handleableDirectiveInfos = [
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Beep", blockingPolicy: BlockingPolicy(medium: .audio, isBlocking: true), preFetch: prefetchBeep, directiveHandler: handleBeep)
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Beep", blockingPolicy: BlockingPolicy(blockedBy: .audio, blocking: .audioOnly), preFetch: prefetchBeep, directiveHandler: handleBeep)
     ]
     
     private var disposeBag = DisposeBag()

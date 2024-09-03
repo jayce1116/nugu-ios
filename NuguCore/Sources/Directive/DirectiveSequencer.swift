@@ -161,19 +161,18 @@ private extension DirectiveSequencer {
             return false
         }
         
+        guard let blockingPolicies = blockingPolicy.blockedBy else { return false }
+        
         return directives[0..<targetDirectiveCount]
-            .contains(where: {
-                if blockingPolicy.medium == .any {
-                    return true
-                }
-                if $0.blockingPolicy.isBlocking == true {
-                    if $0.blockingPolicy.medium == blockingPolicy.medium || $0.blockingPolicy.medium == .any {
+            .compactMap { $0.blockingPolicy.blocking }
+            .contains { policies in
+                for blockingPolicy in blockingPolicies {
+                    if policies.contains(blockingPolicy) {
                         return true
                     }
                 }
-                
                 return false
-            })
+            }
     }
     
     func enqueueBlockedDirectivies() {

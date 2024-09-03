@@ -47,3 +47,21 @@ public protocol ContextManageable: AnyObject {
     /// - Parameter completion: A completion handler block to execute when all of the requests are finished.
     func getContexts(namespace: String, completion: @escaping ([ContextInfo]) -> Void)
 }
+
+public extension ContextManageable {
+    func getContexts() async -> [ContextInfo] {
+        await withCheckedContinuation { continuation in
+            getContexts { contextInfos in
+                continuation.resume(returning: contextInfos)
+            }
+        }
+    }
+    
+    func getContexts(namespace: String) async -> [ContextInfo] {
+        await withCheckedContinuation { continuation in
+            getContexts(namespace: namespace) { contextInfos in
+                continuation.resume(returning: contextInfos)
+            }
+        }
+    }
+}

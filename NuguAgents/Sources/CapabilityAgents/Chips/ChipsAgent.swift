@@ -33,7 +33,7 @@ public final class ChipsAgent: ChipsAgentProtocol {
     
     // Handleable Directive
     private lazy var handleableDirectiveInfos = [
-        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Render", blockingPolicy: BlockingPolicy(medium: .audio, isBlocking: true), directiveHandler: handleRender)
+        DirectiveHandleInfo(namespace: capabilityAgentProperty.name, name: "Render", blockingPolicy: BlockingPolicy(blockedBy: .any, blocking: .audioOnly), directiveHandler: handleRender)
     ]
     
     public init(

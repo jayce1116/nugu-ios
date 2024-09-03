@@ -79,7 +79,7 @@ class NuguApiProvider: NSObject {
      - Parameter registryServerUrl: server url for client load balancing
      - Parameter options: api options.
      */
-    init(timeout: TimeInterval = 10.0) {
+    init(timeout: TimeInterval = 20.0) {
         requestTimeout = timeout
         super.init()
     }

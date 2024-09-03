@@ -43,6 +43,7 @@ public class MediaPlayer: NSObject, MediaPlayable {
     private var sessionHasFinishedLoading: Bool?
     private var pendingRequests = Set<AVAssetResourceLoadingRequest>()
     private var pendingRequestQueue = DispatchQueue(label: "com.sktelecom.romain.pendingRequest")
+    private var pendingCacheQueue = DispatchQueue(label: "com.sktelecom.romain.pendingCache")
     
     // Observers
     private let notificationCenter = NotificationCenter.default
@@ -68,6 +69,12 @@ extension MediaPlayer {
             return
         }
         mediaPlayer.play()
+        
+        pendingCacheQueue.asyncAfter(deadline: .now() + 3.0) { [weak self] in
+            guard let self, let cacheKey = self.playerItem?.cacheKey else { return }
+            MediaCacheManager.setModifiedDateForCacheFile(key: cacheKey)
+        }
+        
         delegate?.mediaPlayerStateDidChange(.start, mediaPlayer: self)
     }
     
@@ -77,7 +84,7 @@ extension MediaPlayer {
             delegate?.mediaPlayerStateDidChange(.error(error: MediaPlayableError.notPrepareSource), mediaPlayer: self)
             return
         }
-        
+                
         mediaPlayer.replaceCurrentItem(with: nil)
         removePlayerItemObserver()  // CHECK-ME: 타이밍 이슈 없을지 확인
         
@@ -448,11 +455,6 @@ private extension MediaPlayer {
             log.debug("playback status changed to: \(notification)")
             
             switch notification {
-            case .readyToPlay:
-                if let cacheKey = object.cacheKey {
-                    MediaCacheManager.setModifiedDateForCacheFile(key: cacheKey)
-                }
-                
             case .failed:
                 log.debug("playback failed reason: \(object.error.debugDescription)")
                 self.delegate?.mediaPlayerStateDidChange(.error(error: object.error ?? MediaPlayableError.unknown), mediaPlayer: self)
