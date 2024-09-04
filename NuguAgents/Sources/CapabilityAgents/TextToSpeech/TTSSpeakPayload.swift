@@ -25,9 +25,10 @@ import NuguCore
 struct TTSSpeakPayload {
     let playStackControl: PlayStackControl?
     let sourceType: SourceType
-    let text: String
+    let text: String?
     let token: String?
     let playServiceId: String?
+    let url: String?
     
     enum SourceType: String, Decodable {
         case url = "URL"
@@ -44,6 +45,7 @@ extension TTSSpeakPayload: Decodable {
         case text
         case token
         case playServiceId
+        case url
     }
     
     init(from decoder: Decoder) throws {
@@ -51,8 +53,9 @@ extension TTSSpeakPayload: Decodable {
         
         playStackControl = try? container.decode(PlayStackControl.self, forKey: .playStackControl)
         sourceType = try container.decodeIfPresent(SourceType.self, forKey: .sourceType) ?? .attachment
-        text = try container.decode(String.self, forKey: .text)
+        text = try? container.decode(String.self, forKey: .text)
         token = try? container.decode(String.self, forKey: .token)
         playServiceId = try? container.decode(String.self, forKey: .playServiceId)
+        url = try? container.decode(String.self, forKey: .url)
     }
 }

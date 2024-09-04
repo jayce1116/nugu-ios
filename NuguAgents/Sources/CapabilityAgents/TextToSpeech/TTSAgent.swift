@@ -550,7 +550,7 @@ public extension NuguAgentNotification {
             
         public struct Result: TypedNotification {
             public static var name: Notification.Name = .ttsAgentResultDidReceive
-            public let text: String
+            public let text: String?
             public let header: Downstream.Header
             
             public static func make(from: [String: Any]) -> Result? {
