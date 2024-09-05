@@ -408,7 +408,7 @@ private extension TTSAgent {
                 
                 log.debug(directive.header.messageId)
                 self.currentPlayer = player
-                self.focusManager.requestFocus(channelDelegate: self)
+                
                 self.ttsNotificationQueue.async { [weak self] in
                     self?.post(NuguAgentNotification.TTS.Result(text: player.payload.text, header: player.header))
                 }
@@ -478,6 +478,8 @@ private extension TTSAgent {
                     log.warning("MediaOpusStreamDataSource not exist or dialogRequesetId not valid")
                     return
                 }
+                
+                focusManager.requestFocus(channelDelegate: self)
             }
             
             #if DEBUG
