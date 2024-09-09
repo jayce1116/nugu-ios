@@ -501,7 +501,6 @@
 		A19EC9FE2578CEA5003E53A9 /* NuguAgents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73152F9A23E0405900F843C3 /* NuguAgents.framework */; };
 		A19ECA022578CEA5003E53A9 /* NuguUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7314DF47255E3EA2004882BB /* NuguUtils.framework */; };
 		A19ECA1A2578CED3003E53A9 /* NuguUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7314DF47255E3EA2004882BB /* NuguUtils.framework */; };
-		E626A0382C0FDD94009C4E63 /* AsyncKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = E626A0372C0FDD94009C4E63 /* AsyncKey.swift */; };
 		E62A15F82BFAB5D600C336FA /* NattyLog in Frameworks */ = {isa = PBXBuildFile; productRef = E62A15F72BFAB5D600C336FA /* NattyLog */; };
 		E62A15FA2BFAB5FA00C336FA /* NattyLog in Frameworks */ = {isa = PBXBuildFile; productRef = E62A15F92BFAB5FA00C336FA /* NattyLog */; };
 		E62A15FD2BFAB62600C336FA /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E62A15FC2BFAB62600C336FA /* RxSwift */; };
@@ -535,6 +534,7 @@
 		E6D10A9A2B9FD9C20004DE40 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = E6D10A992B9FD9C20004DE40 /* PrivacyInfo.xcprivacy */; };
 		E6D10A9C2B9FD9E80004DE40 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = E6D10A9B2B9FD9E80004DE40 /* PrivacyInfo.xcprivacy */; };
 		E6D10A9E2B9FDBB10004DE40 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = E6D10A9D2B9FDBB10004DE40 /* PrivacyInfo.xcprivacy */; };
+		E6D81A8E2C8E812700E813F5 /* AsyncKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = E626A0372C0FDD94009C4E63 /* AsyncKey.swift */; };
 		E6F3DCBD2B4CB9D800298A20 /* ASRAgentDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F3DCBC2B4CB9D800298A20 /* ASRAgentDelegate.swift */; };
 		E6FBA02B2A1379C500AF8B05 /* MessengerAgentProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FBA02A2A1379C400AF8B05 /* MessengerAgentProtocol.swift */; };
 		E6FBA02D2A137A9700AF8B05 /* ImageAgentProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FBA02C2A137A9700AF8B05 /* ImageAgentProtocol.swift */; };
@@ -2759,6 +2759,7 @@
 				73A76A592B6B942C007F4178 /* ServerSentEventReceiver.swift */,
 				7373893124A46D4D0018DDD2 /* Upstream.swift */,
 				7373893224A46D4D0018DDD2 /* Downstream.swift */,
+				E626A0372C0FDD94009C4E63 /* AsyncKey.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2933,7 +2934,6 @@
 			isa = PBXGroup;
 			children = (
 				7E2DFE9D24B8510900792529 /* PlayStackControl.swift */,
-				E626A0372C0FDD94009C4E63 /* AsyncKey.swift */,
 			);
 			path = Directive;
 			sourceTree = "<group>";
@@ -4090,6 +4090,7 @@
 				735A4CC1241172F1004E7A41 /* NuguApi.swift in Sources */,
 				7373892D24A46D430018DDD2 /* StreamDataRoutable.swift in Sources */,
 				1FD4A98423A22576002EB56D /* NuguCore.swift in Sources */,
+				E6D81A8E2C8E812700E813F5 /* AsyncKey.swift in Sources */,
 				1FBE3BEC28375423006D158B /* ClientSideLoadBalanceState.swift in Sources */,
 				7373893824A46D6C0018DDD2 /* AuthorizationStoreDelegate.swift in Sources */,
 				735A4CC624117339004E7A41 /* MultiPartParserError.swift in Sources */,
@@ -4346,7 +4347,6 @@
 				73152FC423E0414F00F843C3 /* SystemAgentExceptionItem.swift in Sources */,
 				1FCAE2A026005AC0001C8061 /* MessageAgentDirectivePayload.swift in Sources */,
 				E649868428336C9E001AD733 /* DisplayHistoryControl.swift in Sources */,
-				E626A0382C0FDD94009C4E63 /* AsyncKey.swift in Sources */,
 				737388C424A46C110018DDD2 /* CapabilityAgentProperty.swift in Sources */,
 				1F9336CA25B68CC000CEBF66 /* MessageAgentProtocol.swift in Sources */,
 				1F9336E225B68D4D00CEBF66 /* MessageAgentDelegate.swift in Sources */,
