@@ -120,7 +120,7 @@ private extension SystemAgent {
                 case .fail(let code):
                     self?.post(NuguAgentNotification.System.Exception(code: code, header: directive.header))
                 case .warning(let code):
-                    log.debug("received warning code: \(code)")
+                    self?.post(NuguAgentNotification.System.ExceptionWarning(code: code, header: directive.header))
                 }
             }
         }
@@ -206,6 +206,7 @@ private extension SystemAgent {
 
 extension Notification.Name {
     static let systemAgentDidReceiveExceptionFail = Notification.Name("com.sktelecom.romaine.notification.name.system_agent_did_receive_exception_fail")
+    static let systemAgentDidReceiveExceptionWarning = Notification.Name("com.sktelecom.romaine.notification.name.system_agent_did_receive_exception_warning")
     static let systemAgentDidReceiveRevokeDevice = Notification.Name("com.sktelecom.romaine.notification.name.system_agent_did_revoke_device")
     static let systemAgentDidReceiveNoDirective = Notification.Name("com.sktelecom.romaine.notification.name.system_agent_no_directive")
     static let systemAgentDidReceiveTermiateApp =
@@ -226,6 +227,19 @@ public extension NuguAgentNotification {
                       let header = from["header"] as? Downstream.Header else { return nil }
                 
                 return Exception(code: code, header: header)
+            }
+        }
+        
+        public struct ExceptionWarning: TypedNotification {
+            public static let name: Notification.Name = .systemAgentDidReceiveExceptionWarning
+            public let code: SystemAgentExceptionCode.Warning
+            public let header: Downstream.Header
+            
+            public static func make(from: [String: Any]) -> ExceptionWarning? {
+                guard let code = from["code"] as? SystemAgentExceptionCode.Warning,
+                      let header = from["header"] as? Downstream.Header else { return nil }
+                
+                return ExceptionWarning(code: code, header: header)
             }
         }
         
