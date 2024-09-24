@@ -251,8 +251,9 @@ extension MediaPlayer {
 
 extension MediaPlayer: AVAssetResourceLoaderDelegate {
     public func resourceLoader(_ resourceLoader: AVAssetResourceLoader, shouldWaitForLoadingOfRequestedResource loadingRequest: AVAssetResourceLoadingRequest) -> Bool {
-        pendingRequestQueue.sync {
-            _ = pendingRequests.insert(loadingRequest)
+        pendingRequestQueue.sync { [weak self] in
+            guard let self else { return }
+            _ = self.pendingRequests.insert(loadingRequest)
         }
         
         guard (sessionHasFinishedLoading ?? false) == false else {
@@ -287,8 +288,9 @@ extension MediaPlayer: AVAssetResourceLoaderDelegate {
     }
     
     public func resourceLoader(_ resourceLoader: AVAssetResourceLoader, didCancel loadingRequest: AVAssetResourceLoadingRequest) {
-        pendingRequestQueue.sync {
-            _ = pendingRequests.remove(loadingRequest)
+        pendingRequestQueue.sync { [weak self] in
+            guard let self else { return }
+            _ = self.pendingRequests.remove(loadingRequest)
         }
     }
 }
@@ -315,8 +317,9 @@ private extension MediaPlayer {
                 loadingRequest.finishLoading()
             }
         }
-        pendingRequestQueue.sync {
-            pendingRequests.subtract(requestsCompleted)
+        pendingRequestQueue.sync { [weak self] in
+            guard let self else { return }
+            self.pendingRequests.subtract(requestsCompleted)
         }
     }
     
@@ -378,8 +381,9 @@ private extension MediaPlayer {
             }
         }
         
-        pendingRequestQueue.sync {
-            pendingRequests.removeAll()
+        pendingRequestQueue.sync { [weak self] in
+            guard let self else { return }
+            self.pendingRequests.removeAll()
         }
     }
 }
@@ -451,7 +455,8 @@ extension MediaPlayer: URLSessionDataDelegate {
 
 private extension MediaPlayer {
     func addPlayerItemObserver(object: MediaAVPlayerItem) {
-        playerStatusObserver = object.observe(NuguCoreNotification.MediaPlayerItem.PlaybackStatus.self, queue: nil) { (notification) in
+        playerStatusObserver = object.observe(NuguCoreNotification.MediaPlayerItem.PlaybackStatus.self, queue: nil) { [weak self] (notification) in
+            guard let self else { return }
             log.debug("playback status changed to: \(notification)")
             
             switch notification {
@@ -464,7 +469,8 @@ private extension MediaPlayer {
             }
         }
         
-        bufferStatusObserver = object.observe(NuguCoreNotification.MediaPlayerItem.BufferStatus.self, queue: nil) { (notification) in
+        bufferStatusObserver = object.observe(NuguCoreNotification.MediaPlayerItem.BufferStatus.self, queue: nil) { [weak self] (notification) in
+            guard let self else { return }
             log.debug("buffer status changed to: \(notification)")
             
             switch notification {
@@ -478,7 +484,7 @@ private extension MediaPlayer {
         // Notification Observer
         playToEndTimeObserver = notificationCenter.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: object, queue: nil) { [weak self] _ in
             log.debug("Did play to end time")
-            guard let self = self else { return }
+            guard let self else { return }
             
             self.delegate?.mediaPlayerStateDidChange(.finish, mediaPlayer: self)
         }
@@ -486,7 +492,7 @@ private extension MediaPlayer {
         // Maybe called by network issue
         failedToPlayEndTimeObserver = notificationCenter.addObserver(forName: .AVPlayerItemFailedToPlayToEndTime, object: object, queue: nil) { [weak self] notification in
             log.debug("Failed to play end time")
-            guard let self = self else { return }
+            guard let self else { return }
             
             let failedToPlayToEndTimeError = notification.userInfo?[AVPlayerItemFailedToPlayToEndTimeErrorKey] as? Error
             log.info("playerItem failed to play to endTime, reason: \(String(describing: failedToPlayToEndTimeError))")
