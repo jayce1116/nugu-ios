@@ -78,7 +78,8 @@ extension MediaPlayer {
         delegate?.mediaPlayerStateDidChange(.start, mediaPlayer: self)
         
         DispatchQueue.global().asyncAfter(deadline: .now() + 0.1) { [weak self] in
-            guard let self, mediaPlayer.timeControlStatus != .playing else { return }
+            guard let self, mediaPlayer.timeControlStatus == .paused else { return }
+            log.error("The media player has paused for an unknown reason.")
             delegate?.mediaPlayerStateDidChange(.pause, mediaPlayer: self)
         }
     }
