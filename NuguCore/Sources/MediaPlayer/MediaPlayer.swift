@@ -76,6 +76,11 @@ extension MediaPlayer {
         }
         
         delegate?.mediaPlayerStateDidChange(.start, mediaPlayer: self)
+        
+        DispatchQueue.global().asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            guard let self, mediaPlayer.timeControlStatus != .playing else { return }
+            delegate?.mediaPlayerStateDidChange(.pause, mediaPlayer: self)
+        }
     }
     
     public func stop() {
