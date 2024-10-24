@@ -15,19 +15,13 @@ fi
 
 echo "update version to $VERSION";
 
-############# podspec update 
+############# xcconfig update
 
-POD_VERSION_NAME="s.version ="
+VERSION_NAME="VERSION ="
+XCCONFIG_NAME="shared.xcconfig"
+XCCONFIG_PATH="${PROJECT_PATH}/SupportingFiles/${XCCONFIG_NAME}"
 
-find ${PROJECT_PATH} -name "*.podspec" -maxdepth 1 -exec sed -i '' "s/${POD_VERSION_NAME} '.*'/${POD_VERSION_NAME} '${VERSION}'/g" {} \;
-
-############# pbxproj update
-
-MARKETING_VERSION_NAME="MARKETING_VERSION \="
-PROJECT_NAME="nugu-ios"
-PBXPROJ_PATH="${PROJECT_PATH}/${PROJECT_NAME}.xcodeproj/project.pbxproj"
-
-sed -i '' "s/${MARKETING_VERSION_NAME} [^\;]*\;/${MARKETING_VERSION_NAME} ${VERSION};/" $PBXPROJ_PATH
+sed -i '' "s/${VERSION_NAME} .*/${VERSION_NAME} ${VERSION}/" $XCCONFIG_PATH
 
 ############# nuguCore version
 
