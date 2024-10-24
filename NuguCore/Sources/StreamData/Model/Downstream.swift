@@ -148,4 +148,15 @@ extension Downstream.Directive {
     public var payloadDictionary: [String: AnyHashable]? {
         try? JSONSerialization.jsonObject(with: payload, options: []) as? [String: AnyHashable]
     }
+    
+    public var asyncKey: AsyncKey? {
+        guard let asyncKeyDictionary = payloadDictionary?["asyncKey"] as? [String: AnyHashable],
+              let eventDialogRequestId = asyncKeyDictionary["eventDialogRequestId"] as? String,
+              let stateRawValue = asyncKeyDictionary["state"] as? String,
+              let state = AsyncKey.State(rawValue: stateRawValue),
+              let routing = asyncKeyDictionary["routing"] as? String else {
+            return nil
+        }
+        return .init(eventDialogRequestId: eventDialogRequestId, state: state, routing: routing)
+    }
 }

@@ -408,7 +408,7 @@ private extension TTSAgent {
                 
                 log.debug(directive.header.messageId)
                 self.currentPlayer = player
-                self.focusManager.requestFocus(channelDelegate: self)
+                
                 self.ttsNotificationQueue.async { [weak self] in
                     self?.post(NuguAgentNotification.TTS.Result(text: player.payload.text, header: player.header))
                 }
@@ -478,6 +478,8 @@ private extension TTSAgent {
                     log.warning("MediaOpusStreamDataSource not exist or dialogRequesetId not valid")
                     return
                 }
+                
+                focusManager.requestFocus(channelDelegate: self)
             }
             
             #if DEBUG
@@ -550,7 +552,7 @@ public extension NuguAgentNotification {
             
         public struct Result: TypedNotification {
             public static var name: Notification.Name = .ttsAgentResultDidReceive
-            public let text: String
+            public let text: String?
             public let header: Downstream.Header
             
             public static func make(from: [String: Any]) -> Result? {
