@@ -85,6 +85,7 @@ public final class AudioPlayerAgent: AudioPlayerAgentProtocol {
         playSyncManager: playSyncManager
     )
     private var currentPlaylist: AudioPlayerPlaylist?
+    private var enableAssetCaching: Bool = true
     
     // Observers
     private let notificationCenter = NotificationCenter.default
@@ -336,6 +337,10 @@ public extension AudioPlayerAgent {
         }
         audioPlayerDisplayManager.notifyUserInteraction()
     }
+    
+    func enableAudioAssetCaching(_ enable: Bool) {
+        enableAssetCaching = enable
+    }
 }
 
 // MARK: - FocusChannelDelegate
@@ -474,7 +479,7 @@ extension AudioPlayerAgent: AudioPlayerProgressDelegate {
 private extension AudioPlayerAgent {
     func prefetchPlay() -> PrefetchDirective {
         return { [weak self] directive in
-            let player = try AudioPlayer(directive: directive)
+            let player = try AudioPlayer(directive: directive, enableAssetCaching: self?.enableAssetCaching ?? true)
             self?.audioPlayerDispatchQueue.async { [weak self] in
                 guard let self = self else { return }
                 

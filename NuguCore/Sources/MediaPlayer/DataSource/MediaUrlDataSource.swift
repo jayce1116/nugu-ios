@@ -23,18 +23,18 @@ import Foundation
 import NuguUtils
 
 public protocol MediaUrlDataSource {
-    func setSource(url: String, offset: TimeIntervallic, cacheKey: String?)
-    func setSource(url: URL, offset: TimeIntervallic, cacheKey: String?)
+    func setSource(url: String, offset: TimeIntervallic, cacheKey: String?, enableAssetCaching: Bool)
+    func setSource(url: URL, offset: TimeIntervallic, cacheKey: String?, enableAssetCaching: Bool)
 }
 
 // MARK: - MediaUrlDataSource
 
 public extension MediaUrlDataSource {
     func setSource(url: String) {
-        setSource(url: url, offset: NuguTimeInterval(seconds: 0), cacheKey: nil)
+        setSource(url: url, offset: NuguTimeInterval(seconds: 0), cacheKey: nil, enableAssetCaching: true)
     }
     
     func setSource(url: URL) {
-        setSource(url: url, offset: NuguTimeInterval(seconds: 0), cacheKey: nil)
+        setSource(url: url, offset: NuguTimeInterval(seconds: 0), cacheKey: nil, enableAssetCaching: true)
     }
 }
