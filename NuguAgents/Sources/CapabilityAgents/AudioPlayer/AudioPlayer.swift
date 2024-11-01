@@ -49,6 +49,7 @@ final class AudioPlayer {
     let header: Downstream.Header
     var cancelAssociation: Bool = false
     var pauseReason: PauseReason = .nothing
+    var enableAssetCaching = true
     // https://tde.sktelecom.com/wiki/display/ERECTUS/0.+AudioPlayer+Interface+1.5#id-0.AudioPlayerInterface1.5-8)PlaybackResumed
     // Resume event should be sent as playback started when audio player has been resumed by play directive
     var sendingResumeEventAsPlaybackStarted: Bool = true
@@ -66,7 +67,7 @@ final class AudioPlayer {
     private var lastDataAppended = false
     private var canReportDelayEvent: Bool = true
     
-    init(directive: Downstream.Directive) throws {
+    init(directive: Downstream.Directive, enableAssetCaching: Bool = true) throws {
         payload = try JSONDecoder().decode(AudioPlayerPlayPayload.self, from: directive.payload)
         
         header = directive.header
@@ -80,7 +81,8 @@ final class AudioPlayer {
             mediaPlayer.setSource(
                 url: url,
                 offset: NuguTimeInterval(seconds: payload.audioItem.stream.offset),
-                cacheKey: payload.cacheKey
+                cacheKey: payload.cacheKey,
+                enableAssetCaching: enableAssetCaching
             )
             internalPlayer = mediaPlayer
         case .attachment:

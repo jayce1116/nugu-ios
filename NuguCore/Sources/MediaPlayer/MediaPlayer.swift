@@ -191,21 +191,21 @@ extension MediaPlayer {
 // MARK: - MediaPlayer + MediaUrlDataSource
 
 extension MediaPlayer: MediaUrlDataSource {
-    public func setSource(url: String, offset: TimeIntervallic, cacheKey: String?) {
+    public func setSource(url: String, offset: TimeIntervallic, cacheKey: String?, enableAssetCaching: Bool) {
         guard let urlItem = URL(string: url) else {
             delegate?.mediaPlayerStateDidChange(.error(error: MediaPlayableError.invalidURL), mediaPlayer: self)
             return
         }
         
-        setSource(url: urlItem, offset: offset, cacheKey: cacheKey)
+        setSource(url: urlItem, offset: offset, cacheKey: cacheKey, enableAssetCaching: enableAssetCaching)
     }
     
-    public func setSource(url: URL, offset: TimeIntervallic, cacheKey: String?) {
+    public func setSource(url: URL, offset: TimeIntervallic, cacheKey: String?, enableAssetCaching: Bool) {
         let playerItem: MediaAVPlayerItem
         if let cacheKey = cacheKey {
             let cacheResult = MediaCacheManager.checkCacheAvailablity(itemURL: url, cacheKey: cacheKey)
             if cacheResult.isAvailable {
-                playerItem = cacheResult.cacheExists ? getCachedPlayerItem(cacheKey: cacheKey, itemURL: cacheResult.endUrl) : getDownloadAndPlayPlayerItem(cacheKey: cacheKey, itemURL: cacheResult.endUrl)
+                playerItem = (cacheResult.cacheExists && enableAssetCaching) ? getCachedPlayerItem(cacheKey: cacheKey, itemURL: cacheResult.endUrl) : getDownloadAndPlayPlayerItem(cacheKey: cacheKey, itemURL: cacheResult.endUrl)
             } else {
                 let asset = AVAsset(url: url)
                 playerItem = MediaAVPlayerItem(asset: asset, cacheKey: cacheKey)

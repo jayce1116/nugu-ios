@@ -102,6 +102,8 @@ public protocol AudioPlayerAgentProtocol: CapabilityAgentable, TypedNotifyable {
     
     /// This should be called when occur interaction(input event such as touch, drag, etc...) for display
     func notifyUserInteraction()
+    
+    func enableAudioAssetCaching(_ enable: Bool)
 }
 
 // MARK: - Default
