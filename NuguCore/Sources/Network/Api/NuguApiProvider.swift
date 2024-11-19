@@ -45,11 +45,13 @@ class NuguApiProvider: NSObject {
     @Atomic private var serverPolicies = [Policy.ServerPolicy]()
     
     private var resourceServerAddress: String? {
-        if cslbState == .activated {
-            return loadBalancedUrl
-        } else {
-            return NuguServerInfo.l4SwitchAddress
-        }
+        loadBalancedUrl
+        // cslb State에 관계 없이 registry를 통해 수신한 서버로 연결시키도록 변경
+//        if cslbState == .activated {
+//            return
+//        } else {
+//            return NuguServerInfo.l4SwitchAddress
+//        }
     }
 
     // handle response for upload task.
