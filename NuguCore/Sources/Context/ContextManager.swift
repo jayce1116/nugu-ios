@@ -76,7 +76,6 @@ extension ContextManager {
                         }
                     }
                 }
-                await group.waitForAll()
                 
                 var results: [ContextInfo?] = []
                 for await result in group {
