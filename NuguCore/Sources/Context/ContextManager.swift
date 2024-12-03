@@ -24,10 +24,7 @@ import Combine
 import NuguUtils
 
 public class ContextManager: ContextManageable {
-    private let contextDispatchQueue = DispatchQueue(label: "com.sktelecom.romaine.context_manager", qos: .userInitiated)
-    
     @Atomic private var providers = [ContextInfoProviderType?]()
-    private var cancellables = Set<AnyCancellable>()
 
     public init() {}
 }
@@ -68,31 +65,27 @@ extension ContextManager {
     }
     
     public func getContexts(completion: @escaping ([ContextInfo]) -> Void) {
-        var requests = [AnyPublisher<ContextInfo?, Never>]()
-        providers.compactMap { $0 }.forEach { (provider) in
-            requests.append(getContext(from: provider))
+        Task {
+            let contextInfos = await withTaskGroup(of: ContextInfo?.self) { group in
+                providers.compactMap { $0 }.forEach { provider in
+                    group.addTask {
+                        await withCheckedContinuation { continuation in
+                            provider { contextInfo in
+                                continuation.resume(returning: contextInfo)
+                            }
+                        }
+                    }
+                }
+                await group.waitForAll()
+                
+                var results: [ContextInfo?] = []
+                for await result in group {
+                    results.append(result)
+                }
+                
+                return results.compactMap { $0 }
+            }
+            completion(contextInfos)
         }
-        
-        Publishers.ZipMany(requests)
-            .subscribe(on: contextDispatchQueue)
-            .map { contextInfos -> [ContextInfo] in
-                return contextInfos.compactMap { $0 }
-            }
-            .sink { contextInfos in
-                completion(contextInfos)
-            }
-            .store(in: &cancellables)
-    }
-}
-
-// MARK: - Private
-
-private extension ContextManager {
-    func getContext(from provider: @escaping ContextInfoProviderType) -> AnyPublisher<ContextInfo?, Never> {
-        Future<ContextInfo?, Never> { promise in
-            provider { contextInfo in
-                promise(.success(contextInfo))
-            }
-        }.eraseToAnyPublisher()
     }
 }
