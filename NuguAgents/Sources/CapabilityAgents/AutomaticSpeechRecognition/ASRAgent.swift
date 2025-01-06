@@ -113,8 +113,7 @@ public final class ASRAgent: ASRAgentProtocol {
                 asrState = .idle
                 expectSpeech = nil
             case .partial:
-                guard case .listening = asrState else { break }
-                asrState = .recognizing
+                break
             case .complete:
                 expectSpeech = nil
             case .cancel:
@@ -418,6 +417,46 @@ extension ASRAgent: EndPointDetectorDelegate {
                 return
             }
             
+            if attachmentSeq == .zero, asrRequest.options.timeout.seconds > Const.epdTimeout {
+                var httpHeaderFields = [String: String]()
+                if let lastAsrEventTime = UserDefaults.Nugu.lastAsrEventTime {
+                    httpHeaderFields["Last-Asr-Event-Time"] = lastAsrEventTime
+                }
+                upstreamDataSender.sendStream(
+                    Event(
+                        typeInfo: .recognize(initiator: asrRequest.initiator, options: asrRequest.options, service: asrRequest.service),
+                        dialogAttributes: dialogAttributeStore.requestAttributes(key: expectSpeech?.messageId),
+                        referrerDialogRequestId: asrRequest.referrerDialogRequestId
+                    ).makeEventMessage(
+                        property: self.capabilityAgentProperty,
+                        eventIdentifier: asrRequest.eventIdentifier,
+                        httpHeaderFields: httpHeaderFields,
+                        contextPayload: asrRequest.contextPayload
+                    )) { [weak self] (state) in
+                        self?.asrDispatchQueue.async { [weak self] in
+                            guard let self else { return }
+                            guard self.asrRequest?.eventIdentifier == asrRequest.eventIdentifier else { return }
+                            
+                            switch state {
+                            case .error(let error):
+                                self.asrResult = .error(error)
+                            case .sent:
+                                UserDefaults.Nugu.lastAsrEventTime = eventTimeFormatter.string(from: Date())
+                            case let .received(part):
+                                guard part.header.namespace != capabilityAgentProperty.category.name else {
+                                    asrRequest.completion?(state)
+                                    return
+                                }
+                                asrState = .idle
+                            default:
+                                break
+                            }
+                            
+                            asrRequest.completion?(state)
+                        }
+                    }
+            }
+            
             let attachment = Attachment(typeInfo: .recognize).makeAttachmentMessage(
                 property: self.capabilityAgentProperty,
                 dialogRequestId: asrRequest.eventIdentifier.dialogRequestId,
@@ -618,46 +657,51 @@ private extension ASRAgent {
         
         asrRequest.completion?(.prepared)
         
-        var httpHeaderFields = [String: String]()
-        if let lastAsrEventTime = UserDefaults.Nugu.lastAsrEventTime {
-            httpHeaderFields["Last-Asr-Event-Time"] = lastAsrEventTime
-        }
-        upstreamDataSender.sendStream(
-            Event(
-                typeInfo: .recognize(initiator: asrRequest.initiator, options: asrRequest.options, service: asrRequest.service),
-                dialogAttributes: dialogAttributeStore.requestAttributes(key: expectSpeech?.messageId),
-                referrerDialogRequestId: asrRequest.referrerDialogRequestId
-            ).makeEventMessage(
-                property: self.capabilityAgentProperty,
-                eventIdentifier: asrRequest.eventIdentifier,
-                httpHeaderFields: httpHeaderFields,
-                contextPayload: asrRequest.contextPayload
-            )) { [weak self] (state) in
-                self?.asrDispatchQueue.async { [weak self] in
-                    guard let self else { return }
-                    guard self.asrRequest?.eventIdentifier == asrRequest.eventIdentifier else { return }
-                    
-                    switch state {
-                    case .error(let error):
-                        self.asrResult = .error(error)
-                    case .sent:
-                        self.asrState = .listening(initiator: asrRequest.initiator)
-                        UserDefaults.Nugu.lastAsrEventTime = eventTimeFormatter.string(from: Date())
-                    case let .received(part):
-                        guard part.header.namespace != capabilityAgentProperty.category.name else {
-                            asrRequest.completion?(state)
-                            return
-                        }
-                        asrState = .idle
-                    default:
-                        break
-                    }
-                    
-                    asrRequest.completion?(state)
-                }
+        if asrRequest.options.timeout.seconds <= Const.epdTimeout {
+            var httpHeaderFields = [String: String]()
+            if let lastAsrEventTime = UserDefaults.Nugu.lastAsrEventTime {
+                httpHeaderFields["Last-Asr-Event-Time"] = lastAsrEventTime
             }
+            upstreamDataSender.sendStream(
+                Event(
+                    typeInfo: .recognize(initiator: asrRequest.initiator, options: asrRequest.options, service: asrRequest.service),
+                    dialogAttributes: dialogAttributeStore.requestAttributes(key: expectSpeech?.messageId),
+                    referrerDialogRequestId: asrRequest.referrerDialogRequestId
+                ).makeEventMessage(
+                    property: self.capabilityAgentProperty,
+                    eventIdentifier: asrRequest.eventIdentifier,
+                    httpHeaderFields: httpHeaderFields,
+                    contextPayload: asrRequest.contextPayload
+                )) { [weak self] (state) in
+                    self?.asrDispatchQueue.async { [weak self] in
+                        guard let self else { return }
+                        guard self.asrRequest?.eventIdentifier == asrRequest.eventIdentifier else { return }
+                        
+                        switch state {
+                        case .error(let error):
+                            self.asrResult = .error(error)
+                        case .sent:
+                            UserDefaults.Nugu.lastAsrEventTime = eventTimeFormatter.string(from: Date())
+                        case let .received(part):
+                            guard part.header.namespace != capabilityAgentProperty.category.name else {
+                                asrRequest.completion?(state)
+                                return
+                            }
+                            asrState = .idle
+                        default:
+                            break
+                        }
+                        
+                        asrRequest.completion?(state)
+                    }
+                }
+        }
         
-        attachmentSeq = 0
+        asrDispatchQueue.async { [weak self] in
+            self?.asrState = .listening(initiator: asrRequest.initiator)
+            self?.attachmentSeq = 0
+        }
+        
         switch asrRequest.options.endPointing {
         case .client:
             endPointDetector = ClientEndPointDetector(asrOptions: asrRequest.options)
@@ -813,4 +857,8 @@ private extension ASRAgent {
             }
         }
     }
+}
+
+private enum Const {
+    static let epdTimeout: Double = 20.0
 }

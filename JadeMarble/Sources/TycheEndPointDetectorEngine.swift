@@ -30,6 +30,8 @@ public class TycheEndPointDetectorEngine {
     private var engineHandle: EpdHandle?
     private var speexEncoder: SpeexEncoder?
     public weak var delegate: TycheEndPointDetectorEngineDelegate?
+    private var ringBuffer: RingBuffer<Data>?
+    private var startOffset: Int32?
     
     #if DEBUG
     private var inputData = Data()
@@ -98,6 +100,7 @@ public class TycheEndPointDetectorEngine {
                 return
             }
 
+            // buffer.frameLength -> 1600
             let (engineState, inputData) = ptrPcmData.withMemoryRebound(to: UInt8.self, capacity: Int(buffer.frameLength * 2)) { (ptrData) -> (Int32, Data) in
                 #if DEBUG
                 self.inputData.append(ptrData, count: Int(buffer.frameLength) * 2)
@@ -121,26 +124,50 @@ public class TycheEndPointDetectorEngine {
                     0
                 )
                 
-                return (engineState, inputData)
+                return (engineState, inputData) // inputData lenghth: 3200
             }
-            guard .zero <= engineState else { return }
+            let state = TycheEndPointDetectorEngine.State(engineState: engineState)
+            guard state != .unknown else { return }
             
             guard let speexEncoder else {
                 log.error("SpeexEncoder is not exist. Please initDetectorEngine first.")
                 return
             }
             
-            do {
-                let speexData = try speexEncoder.encode(data: inputData)
-                self.delegate?.tycheEndPointDetectorEngineDidExtract(speechData: speexData)
-                #if DEBUG
-                self.outputData.append(speexData)
-                #endif
-            } catch {
-                log.error("Failed to speex encoding, error: \(error)")
+            ringBuffer?.enqueue(inputData)
+            
+            let startPoint = epdClientGetSpeechStartPoint(engineHandle, .zero) / 100
+            if startPoint != -1, self.startOffset != startPoint {
+                self.startOffset = startPoint
+                ringBuffer?.moveHead(to: Int(startPoint))
             }
             
-            self.state = TycheEndPointDetectorEngine.State(engineState: engineState)
+            if state == .start, let dequeuedInputData = ringBuffer?.dequeue() {
+                do {
+                    let speexData = try speexEncoder.encode(data: dequeuedInputData)
+                    self.delegate?.tycheEndPointDetectorEngineDidExtract(speechData: speexData)
+                    #if DEBUG
+                    self.outputData.append(speexData)
+                    #endif
+                } catch {
+                    log.error("Failed to speex encoding, error: \(error)")
+                }
+            } else if state == .end {
+                while ringBuffer?.isEmpty() == true {
+                    guard let dequeuedInputData = ringBuffer?.dequeue() else { break }
+                    do {
+                        let speexData = try speexEncoder.encode(data: dequeuedInputData)
+                        self.delegate?.tycheEndPointDetectorEngineDidExtract(speechData: speexData)
+                        #if DEBUG
+                        self.outputData.append(speexData)
+                        #endif
+                    } catch {
+                        log.error("Failed to speex encoding, error: \(error)")
+                    }
+                }
+            }
+            
+            self.state = state
             
             #if DEBUG
             if self.state == .end {
@@ -186,6 +213,8 @@ public class TycheEndPointDetectorEngine {
         
         speexEncoder = nil
         state = .idle
+        ringBuffer = nil
+        startOffset = nil
     }
     
     private func initDetectorEngine(
@@ -206,6 +235,7 @@ public class TycheEndPointDetectorEngine {
         
         let speexEncoder = SpeexEncoder(sampleRate: Int(sampleRate), inputType: EndPointDetectorConst.inputStreamType)
         self.speexEncoder = speexEncoder
+        ringBuffer = RingBuffer(capacity: 2 * 10 * 10) // 20s
         guard let epdHandle = epdClientChannelSTART(
             modelPath,
             myint(sampleRate),
